@@ -1,14 +1,26 @@
 {
   "name": "mypearl-virtual-tryon",
   "version": "1.0.0",
+  "private": true,
   "dependencies": {
+    "@tensorflow/tfjs": "3.18.0",
+    "@tensorflow/tfjs-core": "3.18.0",
+    "@tensorflow/tfjs-backend-webgl": "3.18.0",
+    "@tensorflow-models/face-landmarks-detection": "1.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-scripts": "^5.0.1"
+    "react-scripts": "5.0.1"
   },
   "scripts": {
-    "start": "set NODE_OPTIONS=--openssl-legacy-provider && react-scripts start",
-    "build": "set NODE_OPTIONS=--openssl-legacy-provider && react-scripts build"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app"
+    ]
   },
   "browserslist": {
     "production": [

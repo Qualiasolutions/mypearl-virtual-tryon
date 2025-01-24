@@ -1,0 +1,72 @@
+// src/components/ShadePreview.js
+import React, { useEffect, useRef } from 'react';
+import FaceShader from '../services/FaceShader';
+
+const ShadePreview = ({ videoRef, imageUrl, selectedShade }) => {
+  const canvasRef = useRef(null);
+  const animationRef = useRef(null);
+  const imageRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    const video = videoRef?.current;
+
+    const updateCanvas = async () => {
+      if (!canvas || !ctx) return;
+
+      // Handle video input
+      if (video && video.readyState === 4) {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        
+        if (selectedShade) {
+          await FaceShader.processVideoFrame(video, ctx, selectedShade.color);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(video, 0, 0);
+        }
+        
+        // Continue animation for video
+        animationRef.current = requestAnimationFrame(updateCanvas);
+      }
+      // Handle image input
+      else if (imageUrl && imageRef.current) {
+        canvas.width = imageRef.current.width;
+        canvas.height = imageRef.current.height;
+        
+        if (selectedShade) {
+          await FaceShader.processImage(imageRef.current, ctx, selectedShade.color);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(imageRef.current, 0, 0);
+        }
+      }
+    };
+
+    // Handle image loading
+    if (imageUrl) {
+      imageRef.current = new Image();
+      imageRef.current.onload = updateCanvas;
+      imageRef.current.src = imageUrl;
+    } else {
+      updateCanvas();
+    }
+
+    // Cleanup
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [videoRef, imageUrl, selectedShade]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="shade-preview-canvas"
+    />
+  );
+};
+
+export default ShadePreview;

@@ -1,13 +1,16 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
+// src/index.js
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import App from './App';
+import './styles.css';
 
-import App from "./App";
-
-const rootElement = document.getElementById("root");
+// Get root element
+const rootElement = document.getElementById('root');
 const root = createRoot(rootElement);
 
+// Enable strict mode for better development practices
 root.render(
-  <StrictMode>
+  <React.StrictMode>
     <App />
-  </StrictMode>
+  </React.StrictMode>
 );
